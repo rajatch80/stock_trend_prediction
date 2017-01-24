@@ -1,62 +1,43 @@
 import pandas as pd
-import pandas.io.data
+from pandas_datareader import data
 import os, shutil
 
-def getStock(symbol, start, end):
+def getStock(symbol, start, end, name):
 
-	print "started ", symbol
-	df =  pandas.io.data.get_data_yahoo(symbol, start, end)
-	name = symbol.replace("^","")
+	print "started.................. ", name
+	df =  data.get_data_yahoo(symbol, start, end)
+	name_ = symbol.replace("^","")
 	df.columns.values[-1] = 'AdjClose'
-	df.columns = df.columns + '_' + name
-	df['Return_%s' % name] = df['AdjClose_%s' % name].pct_change()
-	name = symbol.replace("^","") + ".csv"
-	print "DONE..............."
+	df.columns = df.columns + '_' + name_
+	df['Return_%s' % name_] = df['AdjClose_%s' % name_].pct_change()
 
+	name = name + ".csv"
 	df.to_csv(name, sep='\t', encoding='utf-8')
-	shutil.move(name, './data/')
+	dir_ = './data/'
+	if not os.path.exists(dir_):
+	    os.makedirs(dir_)
+	shutil.move(name, dir_)
+	print "DONE...............", name
+	print ''
 
 
 def getStockDataFromWeb(start, end):
-	getStock('^GSPC', start, end)
-	print "Got S&P500"
-	# getStock('^IXIC', start, end)
-	# print "Got nasdaq"
-	# getStock('^DJI', start, end)
-	# print "Got djia"
-	# getStock('^GDAXI', start, end)
-	# print "Got frankfurt"
-	# getStock('^FTSE', start, end)
-	# print "Got london"
-	# getStock('^FCHI', start, end)
-	# print "Got paris"
-	# getStock('^HSI', start, end)
-	# print "Got hkong"
-	# getStock('^N225', start, end)
-	# print "Got nikkei"
-	# getStock('^AXJO', start, end)
-	# print "Got australia"
-	# getStock('AAPL', start, end)
-	# print "Got AAPL"
-	# getStock('AMZN', start, end)
-	# print "Got AMZN"
-	# getStock('MSFT', start, end)
-	# print "Got MSFT"
-	# getStock('RELIANCE.NS', start, end)
-	# print "Got RELIANCE.NS"
-	# getStock('TATASTEEL.NS', start, end)
-	# print "Got TATASTEEL.NS"
+	stocks = {}
+	stocks['sp500'] = '^GSPC'
+	stocks['nasdaq'] = '^IXIC'
+	stocks['djia'] = '^DJI'
+	stocks['frankfurt'] = '^GDAXI'
+	stocks['london'] = '^FTSE'
+	stocks['paris'] = '^FCHI'
+	stocks['hkong'] = '^HSI'
+	stocks['nikkei'] = '^N225'
+	stocks['australia'] = '^AXJO'
+	stocks['amazon'] = 'AMZN'
+	stocks['apple'] = 'AAPL'
+	stocks['microsoft'] = 'MSFT'
 
+	for stock in stocks:
+		getStock(stocks[stock], start, end, stock)
 
-
-
-	# out =  pandas.io.data.get_data_yahoo(fout, start, end)
-	# print "Got out"
-	# out.columns.values[-1] = 'AdjClose'
-	# out.columns = out.columns + '_Out'
-	# out['Return_Out'] = out['AdjClose_Out'].pct_change()
-	#
-	# out.to_csv("out.csv", sep='\t', encoding='utf-8')
-
-
-getStockDataFromWeb('01-01-2010', '31-12-2016')
+if __name__ == "__main__":
+	getStockDataFromWeb('01-01-2010', '31-12-2016')

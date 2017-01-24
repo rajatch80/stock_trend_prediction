@@ -3,6 +3,7 @@ from __future__ import division
 import numpy as np
 import pandas as pd
 import datetime
+import sklearn
 from sklearn import preprocessing
 from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier
@@ -10,7 +11,6 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn import svm
 from sklearn import neighbors
-import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import train_test_split
@@ -30,10 +30,10 @@ def visualize_tree(tree, feature_names):
 
 	command = ["dot", "-Tpng", "dt.dot", "-o", "dt.png"]
 	subprocess.check_call(command)
-   
+
 
 def performKNNClass(X_train, y_train, X_test, y_test):
-	
+
 	clf = neighbors.KNeighborsClassifier(n_neighbors=1000)
 	clf.fit(X_train, y_train)
 
@@ -42,19 +42,19 @@ def performKNNClass(X_train, y_train, X_test, y_test):
 	return accuracy
 
 def performSVMClass(X_train, y_train, X_test, y_test):
-	
+
 	rbf_svc = svm.SVC(kernel='rbf', gamma=0.7, C=1)
 	rbf_svc.fit(X_train, y_train)
 
 	accuracy = rbf_svc.score(X_test, y_test)
-	
+
 	return accuracy
-	
+
 
 def performRFClass(X_train, y_train, X_test, y_test):
-	
+
 	clf = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
-	clf.fit(X_train, y_train)  
+	clf.fit(X_train, y_train)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -105,9 +105,9 @@ def predict_nextDay_trend(stockToPredict, symbol):
 
 	features = dataset.columns[:]
 	# print features["UpDown"][3:10]
-	X = dataset[features]    
+	X = dataset[features]
 	# print X
-	
+
 	# print X.iloc[4500:4510,1:5]
 	# return 0
 	# X_scaled = preprocessing.scale(X)
@@ -131,7 +131,7 @@ def predict_nextDay_trend(stockToPredict, symbol):
 	# print features
 
 	# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-	
+
 	acc_svm=0
 	acc_KNN=0
 	num_folds = 10
@@ -178,7 +178,7 @@ def predict_nextDay_trend(stockToPredict, symbol):
 		# print "KNN: " + str(i), acc2
 		acc_svm = acc_svm + acc1
 		# acc_KNN = acc_KNN + acc2
-		
+
 	print "Accuracy "+ symbol +" ", acc_svm/10
 	# print "Accuracy KNN", acc_KNN/10
 	# performKNNClass(X_train, y_train, X_test, y_test)
@@ -202,12 +202,12 @@ def predict_next6Day_trend(stockToPredict, symbol):
 			dataset['UpDown'][i+6] = 1
 		else:
 			dataset['UpDown'][i+6] = 0
-	
+
 
 	# print dataset["UpDown"][0:10]
 	features = dataset.columns[:]
 	# print features["UpDown"][3:10]
-	X = dataset[features]  
+	X = dataset[features]
 	X = X.iloc[6:, :]
 	X = X.fillna(0)
 	y = dataset.UpDown
@@ -219,7 +219,7 @@ def predict_next6Day_trend(stockToPredict, symbol):
 	# print features
 
 	# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-	
+
 	acc_svm=0
 	acc_KNN=0
 	num_folds = 10
@@ -257,7 +257,7 @@ def predict_next6Day_trend(stockToPredict, symbol):
 		if i < 4:
 			acc_svm = acc_svm + acc1
 		# acc_KNN = acc_KNN + acc2
-		
+
 	print "Accuracy "+ symbol +" ", acc_svm/4
 
 
