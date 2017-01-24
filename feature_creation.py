@@ -123,21 +123,6 @@ def create_features(stock, symbol):
 	stock = stock.drop("avgLoss6", 1)
 	stock = stock.drop("avgGain14", 1)
 	stock = stock.drop("avgLoss14", 1)
-	'''
-		Exponential Moving Average, 6 and 14 days
-	'''
-
-	'''
-		William %R
-	'''
-
-	'''
-	 	Stochastic Indicator (%K)
-	'''
-
-	'''
-		On Balance Volume (OBV)
-	'''
 
 	stock = stock.fillna(stock.mean())
 
