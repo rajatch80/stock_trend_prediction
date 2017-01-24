@@ -53,7 +53,7 @@ def plot_data(dataset):
 	plt.show()
 
 def performKNNClass(X_train, y_train, X_test, y_test):
-	
+
 	clf = neighbors.KNeighborsClassifier(n_neighbors=10)
 	clf.fit(X_train, y_train)
 	results = clf.predict(X_test)
@@ -87,14 +87,14 @@ def performSVMClass(X_train, y_train, X_test, y_test):
 	num_correct = (results == y_test).sum()
 	recall = num_correct / len(y_test)
 	# print "SVM model accuracy (%): ", recall * 100, "%"
-	
+
 	return recall*100
-	
+
 
 def performRFClass(X_train, y_train, X_test, y_test):
-	
+
 	clf = RandomForestClassifier(n_estimators=10, n_jobs=1)
-	clf.fit(X_train, y_train)  
+	clf.fit(X_train, y_train)
 
 	results = clf.predict(X_test)
 	print y_test
@@ -108,7 +108,7 @@ def performRFClass(X_train, y_train, X_test, y_test):
 
 def mergeDataFrames(datasets):
 	new_df1 = datasets[0].join(datasets[1], how='outer')
-	
+
 	return new_df1
 
 def predict_nextDay_trend(base, stockToPredict):
@@ -133,7 +133,7 @@ def predict_nextDay_trend(base, stockToPredict):
 	# print dataset['UpDown'][2:10]
 	# plot_data(dataset)
 	# return 0
-	
+
 	y = dataset.UpDown
 	labels = list(set(y))
 	y = np.array([labels.index(x) for x in y])
@@ -173,8 +173,8 @@ def predict_next6Day_trend(base, stockToPredict, symbol):
 			dataset['UpDown'][i+6] = 1
 		else:
 			dataset['UpDown'][i+6] = 0
-	
-	
+
+
 	y = dataset.UpDown
 	y = y[6:-40]
 	y = y.fillna(0)
@@ -187,7 +187,7 @@ def predict_next6Day_trend(base, stockToPredict, symbol):
 	X = np.array(features)
 
 	# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-	
+
 	kf = KFold(len(y), n_folds=5)
 	acc_svm=0
 	acc_rcf=0
@@ -218,44 +218,44 @@ apple = pd.read_csv("apple_with_features.csv", sep = "\t", index_col="Date")
 amazon = pd.read_csv("amazon_with_features.csv", sep = "\t", index_col="Date")
 microsoft = pd.read_csv("microsoft_with_features.csv", sep = "\t", index_col="Date")
 
-# print "===============Predicting Next Day Trend====================="
-# print ""
-# print "Predicting base: sp500, market index: hkong"
-# predict_nextDay_trend(sp500, hkong)
-# print ""
-# print "Predicting base: sp500, market index: australia"
-# predict_nextDay_trend(sp500, australia)
-# print ""
-# print "Predicting base: sp500, market index: djia"
-# predict_nextDay_trend(sp500, djia)
-# print ""
-# print "Predicting base: hkong, market index: sp500"
-# predict_nextDay_trend(hkong, sp500)
-# print ""
-# print "Predicting base: australia, market index: sp500"
-# predict_nextDay_trend(australia, sp500)
-# print ""
-# print "Predicting base: djia, market index: sp500"
-# predict_nextDay_trend(djia, sp500)
-# print ""
-# print "Predicting base: hkong, market index: australia"
-# predict_nextDay_trend(hkong, australia)
-# print ""
-# print "Predicting base: hkong, market index: djia"
-# predict_nextDay_trend(hkong, djia)
-# print ""
-# print "Predicting base: australia, market index: djia"
-# predict_nextDay_trend(australia, djia)
-# print ""
-# print "Predicting base: australia, market index: hkong"
-# predict_nextDay_trend(australia, hkong)
-# print ""
-# print "Predicting base: djia, market index: australia"
-# predict_nextDay_trend(djia, australia)
-# print ""
-# print "Predicting base: djia, market index: hkong"
-# predict_nextDay_trend(djia, hkong)
-# print ""
+print "===============Predicting Next Day Trend====================="
+print ""
+print "Predicting base: sp500, market index: hkong"
+predict_nextDay_trend(sp500, hkong)
+print ""
+print "Predicting base: sp500, market index: australia"
+predict_nextDay_trend(sp500, australia)
+print ""
+print "Predicting base: sp500, market index: djia"
+predict_nextDay_trend(sp500, djia)
+print ""
+print "Predicting base: hkong, market index: sp500"
+predict_nextDay_trend(hkong, sp500)
+print ""
+print "Predicting base: australia, market index: sp500"
+predict_nextDay_trend(australia, sp500)
+print ""
+print "Predicting base: djia, market index: sp500"
+predict_nextDay_trend(djia, sp500)
+print ""
+print "Predicting base: hkong, market index: australia"
+predict_nextDay_trend(hkong, australia)
+print ""
+print "Predicting base: hkong, market index: djia"
+predict_nextDay_trend(hkong, djia)
+print ""
+print "Predicting base: australia, market index: djia"
+predict_nextDay_trend(australia, djia)
+print ""
+print "Predicting base: australia, market index: hkong"
+predict_nextDay_trend(australia, hkong)
+print ""
+print "Predicting base: djia, market index: australia"
+predict_nextDay_trend(djia, australia)
+print ""
+print "Predicting base: djia, market index: hkong"
+predict_nextDay_trend(djia, hkong)
+print ""
 
 print "===============Predicting Next 6 Days Trend====================="
 print ""

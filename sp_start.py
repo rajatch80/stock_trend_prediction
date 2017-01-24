@@ -35,7 +35,7 @@ def getStock(symbol, start, end):
 
 def getStockDataFromWeb(fout, start, end):
 	"""
-	Collects predictors data from Yahoo Finance and Quandl.
+	Collects predictors data from Yahoo Finance.
 	Returns a list of dataframes.
 	"""
 	#start = parser.parse(start_string)
@@ -71,7 +71,7 @@ def addFeatures(dataframe, adjclose, returns, n):
 	"""
 	operates on two columns of dataframe:
 	- n >= 2
-	- given Return_* computes the return of day i respect to day i-n. 
+	- given Return_* computes the return of day i respect to day i-n.
 	- given AdjClose_* computes its moving average on n days
 
 	"""
@@ -87,7 +87,7 @@ def applyRollMeanDelayedReturns(datasets, delta):
 	applies rolling mean and delayed returns to each dataframe in the list
 	"""
 	for dataset in datasets:
-		columns = dataset.columns    
+		columns = dataset.columns
 		adjclose = columns[-2]
 		returns = columns[-1]
 		for n in delta:
@@ -97,7 +97,7 @@ def applyRollMeanDelayedReturns(datasets, delta):
 
 def mergeDataframes(datasets, index, cut):
 	"""
-	merges datasets in the list 
+	merges datasets in the list
 	"""
 	subset = []
 	subset = [dataset.iloc[:, index:] for dataset in datasets[1:]]
@@ -105,7 +105,7 @@ def mergeDataframes(datasets, index, cut):
 
 	first = subset[0].join(subset[1:], how = 'outer')
 	# print first
-	finance = datasets[0].iloc[:, index:].join(first, how = 'left') 
+	finance = datasets[0].iloc[:, index:].join(first, how = 'left')
 	# print finance
 	finance = finance[finance.index > cut]
 	# print finance
@@ -134,7 +134,7 @@ def applyTimeLag(dataset, lags, delta):
 
 def prepareDataForClassification(dataset):
 	"""
-	generates categorical output column, attach to dataframe 
+	generates categorical output column, attach to dataframe
 	label the categories and split into train and test
 	"""
 	le = preprocessing.LabelEncoder()
@@ -145,11 +145,11 @@ def prepareDataForClassification(dataset):
 	dataset.UpDown = le.fit(dataset.UpDown).transform(dataset.UpDown)
 
 	features = dataset.columns[1:-1]
-	X = dataset[features]    
+	X = dataset[features]
 	y = dataset.UpDown
 
 	# print X.shape
-	# print y.shape   
+	# print y.shape
 
 	# print X.index
 
@@ -175,7 +175,7 @@ def prepareDataForClassification(dataset):
 	X_test = imp.fit_transform(X_test)
 	# y
 
-	return X_train, y_train, X_test, y_test 
+	return X_train, y_train, X_test, y_test
 
 def performRFClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	"""
@@ -188,7 +188,7 @@ def performRFClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -204,7 +204,7 @@ def performKNNClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -222,7 +222,7 @@ def performSVMClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -240,7 +240,7 @@ def performAdaBoostClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -256,7 +256,7 @@ def performGTBClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -279,7 +279,7 @@ def performQDAClass(X_train, y_train, X_test, y_test, fout, savemodel):
 	# if savemodel == True:
 	# 	fname_out = '{}-{}.pickle'.format(fout, datetime.now())
 	# 	with open(fname_out, 'wb') as f:
-	# 		cPickle.dump(clf, f, -1)    
+	# 		cPickle.dump(clf, f, -1)
 
 	accuracy = clf.score(X_test, y_test)
 
@@ -291,14 +291,14 @@ def performFeatureSelection(maxdeltas, maxlags):
 	"""
 
 	for maxlag in range(3, maxlags + 2):
-		lags = range(2, maxlag) 
+		lags = range(2, maxlag)
 		print ''
 		print '============================================================='
 		print 'Maximum time lag applied', max(lags)
 		print ''
 		for maxdelta in range(3, maxdeltas + 2):
 			datasets = getStockDataFromWeb('^GSPC', '01-01-1993', '03-07-2016')
-			delta = range(2, maxdelta) 
+			delta = range(2, maxdelta)
 			print 'Delta days accounted: ', max(delta)
 			datasets = applyRollMeanDelayedReturns(datasets, delta)
 			print "APPLY ROLLMEAN DONE......."
@@ -308,7 +308,7 @@ def performFeatureSelection(maxdeltas, maxlags):
 			# finance = finance.interpolate(method='linear')
 			# print 'Number of NaN after time interpolation: ', count_missing(finance)
 			# finance = finance.fillna(finance.mean())
-			# print 'Number of NaN after mean interpolation: ', count_missing(finance)    
+			# print 'Number of NaN after mean interpolation: ', count_missing(finance)
 			finance = applyTimeLag(finance, lags, delta)
 			# print 'Number of NaN after temporal shifting: ', count_missing(finance)
 			print 'Size of data frame after feature creation: ', finance.shape
@@ -316,7 +316,7 @@ def performFeatureSelection(maxdeltas, maxlags):
 			print "DATA PREPARED..."
 			performRFClass(X_train, y_train, X_test, y_test, "^IXIC", True)
 			# print performCV(X_train, y_train, folds, method, parameters, fout, savemodel)
-			# print '' 
+			# print ''
 
 ####  MAIN  ############
 l = getStockDataFromWeb('^GSPC', '1993-01-01', '2016-03-07')

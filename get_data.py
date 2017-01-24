@@ -12,9 +12,9 @@ def getStock(symbol, start, end):
 	df['Return_%s' % name] = df['AdjClose_%s' % name].pct_change()
 	name = symbol.replace("^","") + ".csv"
 	print "DONE..............."
-	
+
 	df.to_csv(name, sep='\t', encoding='utf-8')
-	
+
 
 def getStockDataFromWeb(start, end):
 	# getStock('^GSPC', start, end)
@@ -45,7 +45,7 @@ def getStockDataFromWeb(start, end):
 	print "Got RELIANCE.NS"
 	getStock('TATASTEEL.NS', start, end)
 	print "Got TATASTEEL.NS"
-	
+
 
 
 
@@ -57,5 +57,5 @@ def getStockDataFromWeb(start, end):
 
 	# out.to_csv("out.csv", sep='\t', encoding='utf-8')
 
-	
-getStockDataFromWeb('01-01-2010', '03-06-2016')
+
+getStockDataFromWeb('01-01-2010', '31-12-2016')
